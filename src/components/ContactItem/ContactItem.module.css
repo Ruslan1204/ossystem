@@ -1,0 +1,11 @@
+.transaction_history {
+  text-align: center;
+  border-collapse: collapse;
+  text-transform: capitalize;
+}
+
+.transaction_history th,
+.transaction_history td {
+  padding: 10px;
+  border: 1px solid #2a2a2a;
+}
