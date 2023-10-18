@@ -1,4 +1,4 @@
-.transaction_history {
+/* .transaction_history {
   text-align: center;
   border-collapse: collapse;
   text-transform: capitalize;
@@ -8,4 +8,27 @@
 .transaction_history td {
   padding: 10px;
   border: 1px solid #2a2a2a;
+} */
+
+
+.item{
+  display: flex;
+  text-align: center;
+  align-items: center;
+
+
+  /* margin-bottom: 10px; */
+  /* border-radius: 5%; */
+}
+
+
+.status{
+  width: 15px;
+  height: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  background-color: greenyellow;
+
+  border-radius: 50%;
 }

@@ -12,13 +12,13 @@ export const Filter = ({ onChange }) => {
 
   const changeFilter = evt => {
     const { value } = evt.target;
-    console.log(value);
+
     dispatch(contactsFilterAction(value));
   };
 
   const changeAge = evt => {
     const { value } = evt.target;
-    console.log(value);
+
     dispatch(contactsAgeAction(value));
   };
 

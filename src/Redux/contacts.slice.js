@@ -10,13 +10,14 @@ export const contactSlice = createSlice({
       reducer(state, { payload }) {
         state.contacts.push(payload);
       },
-      prepare(name, age, status) {
+      prepare(name, age, img, st) {
         return {
           payload: {
             id: nanoid(),
             name,
             age,
-            status: false,
+            img,
+            st,
           },
         };
       },

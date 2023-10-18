@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import css from '../ContactForm/ContactForm.module.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,41 +9,69 @@ import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 
-
 export const ContactForm = ({ onAdd }) => {
   const [name, setName] = useState('');
-  const [age, setnumber] = useState('');
-  const [images, setImages] = useState('');
+  const [age, setNumber] = useState('');
+  const [images, setImages] = useState([]);
+  const [status, setStatus] = useState('');
+
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const contacts = useSelector(state => state.contacts);
 
-  const fetchData = async () => {
-    // setIsLoading(true);
-    try {
-      const { data } = await axios.get(
-        `https://api.dicebear.com/7.x/adventurer/svg?seed=${name}&hairColor=afafaf`
-      );
+  const img = Object.values(images);
+  const st = Object.values(status);
+  let colorHeir = '';
 
-      console.log(data);
-      
-    } catch (error) {
-      console.log(error);
-    } finally {
-      // setIsLoading(false);
+  if (age >= 45) {
+    colorHeir = 'afafaf';
+  } else {
+    colorHeir = '562306';
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // setIsLoading(true);
+      try {
+        const { config } = await axios.get(
+          `https://api.dicebear.com/7.x/adventurer/svg?seed=${name}&hairColor=${colorHeir}`
+        );
+
+        setImages({ images: config.url });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        // setIsLoading(false);
+      }
+    };
+
+    if (name !== '' && age !== '') {
+      fetchData(name, age);
     }
-  };
+  }, [name, age, colorHeir]);
 
-  fetchData();
+  useEffect(() => {
+    const fetchStatus = async () => {
+      // setIsLoading(true);
+      try {
+        const { data } = await axios.get(`https://yesno.wtf/api`);
 
-  // useEffect(() => {
-  //   if (name !== '' && age !== '') {
-  //     fetchData(name, age);
-  //   }
-  // }, [name, age]);
+        // console.log(data.answer);
+        setStatus({ status: data.answer });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        // setIsLoading(false);
+      }
+    };
 
-  const handleAddContacts = (name, age) => {
+    if (name !== '' && age !== '') {
+      fetchStatus(name, age);
+    }
+  }, [name, age]);
+
+  const handleAddContacts = (name, age, img, st) => {
     const mapName = contacts
       .map(contact => {
         return contact.name;
@@ -51,7 +79,7 @@ export const ContactForm = ({ onAdd }) => {
       .join('')
       .includes(name);
     if (!mapName) {
-      dispatch(addContactsAction(name, age));
+      dispatch(addContactsAction(name, age, img, st));
     } else {
       return alert(`${name} is already in contacts.`);
     }
@@ -66,7 +94,15 @@ export const ContactForm = ({ onAdd }) => {
         break;
 
       case 'age':
-        setnumber(value);
+        setNumber(value);
+        break;
+
+      case 'images':
+        setImages(value);
+        break;
+
+      case 'status':
+        setStatus(value);
         break;
 
       default:
@@ -78,9 +114,11 @@ export const ContactForm = ({ onAdd }) => {
     e.preventDefault();
 
     // onAdd(name, number);
-    handleAddContacts(name, age);
+    handleAddContacts(name, age, img, st);
     setName('');
-    setnumber('');
+    setNumber('');
+    setImages([]);
+    setStatus('');
 
     navigate('/');
   };
@@ -119,6 +157,13 @@ export const ContactForm = ({ onAdd }) => {
           Add User
         </button>
       </form>
+
+      {name !== '' && age !== '' && <img src={img} alt="avatar" width={100} height={100} />}
+      {st.join('') === 'yes' && (
+        <li className={css.item}>
+          <span className={css.status}></span>
+        </li>
+      )}
     </div>
   );
 };

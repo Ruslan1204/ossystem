@@ -10,14 +10,13 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-import Paper from '@mui/material/Paper';
-import TableContainer from '@mui/material/TableContainer';
 
 export const ContactList = ({ onDelete }) => {
   const dispatch = useDispatch();
   const filter = useSelector(state => state.filter);
   const contacts = useSelector(state => state.contacts);
   const age = useSelector(state => state.age);
+
 
   const handleDeleteContact = id => {
     dispatch(contactsDeleteAction(id));
