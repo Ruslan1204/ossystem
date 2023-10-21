@@ -1,6 +1,6 @@
-import { initState } from './contacts.init-state';
+import { initState } from './users.init-state';
 
-import { contactsReducer } from './contacts.slice';
+import { usersReducer } from './user.slice';
 
 import { configureStore } from '@reduxjs/toolkit';
 
@@ -26,12 +26,12 @@ import {
 // export const store = createStore(rootReducer, initState, enhancer);
 
 const persistConfig = {
-  key: 'contact',
+  key: 'user',
   storage,
-  whitelist: ['contacts'],
+  whitelist: ['users'],
 };
 
-const persistedReducer = persistReducer(persistConfig, contactsReducer);
+const persistedReducer = persistReducer(persistConfig, usersReducer);
 
 export const store = configureStore({
   preloadedState: initState,

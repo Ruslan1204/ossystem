@@ -1,24 +1,31 @@
 // import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import css from '../ContactForm/ContactForm.module.css';
+import css from '../UserForm/UserForm.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContactsAction } from 'Redux/contacts.slice';
+import { addUserAction } from 'Redux/user.slice';
 
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
+import { UserEdit } from '../UserEdit';
+
 import axios from 'axios';
 
-export const ContactForm = ({ onAdd }) => {
+import { useParams } from "react-router-dom";
+
+export const UserForm = () => {
   const [name, setName] = useState('');
-  const [age, setNumber] = useState('');
-  const [images, setImages] = useState([]);
+  const [age, setAge] = useState('');
+  const [images, setImages] = useState('');
   const [status, setStatus] = useState('');
+  
+  const { id } = useParams();
+
 
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts);
+  const users = useSelector(state => state.users);
 
   const img = Object.values(images);
   const st = Object.values(status);
@@ -71,17 +78,18 @@ export const ContactForm = ({ onAdd }) => {
     }
   }, [name, age]);
 
-  const handleAddContacts = (name, age, img, st) => {
-    const mapName = contacts
-      .map(contact => {
-        return contact.name;
+  const handleAddUsers = (name, age, img, st) => {
+    const mapName = users
+      .map(user => {
+        return user.name;
       })
       .join('')
       .includes(name);
+
     if (!mapName) {
-      dispatch(addContactsAction(name, age, img, st));
+      dispatch(addUserAction(name, age, img, st));
     } else {
-      return alert(`${name} is already in contacts.`);
+      return alert(`${name} is already in users.`);
     }
   };
 
@@ -94,7 +102,7 @@ export const ContactForm = ({ onAdd }) => {
         break;
 
       case 'age':
-        setNumber(value);
+        setAge(value);
         break;
 
       case 'images':
@@ -113,10 +121,12 @@ export const ContactForm = ({ onAdd }) => {
   const handleSubmit = e => {
     e.preventDefault();
 
-    // onAdd(name, number);
-    handleAddContacts(name, age, img, st);
+    handleAddUsers(name, age, img, st);
+
+    // console.log('UserForm', users);
+
     setName('');
-    setNumber('');
+    setAge('');
     setImages([]);
     setStatus('');
 
@@ -164,67 +174,8 @@ export const ContactForm = ({ onAdd }) => {
           <span className={css.status}></span>
         </li>
       )}
+
+      <UserEdit />
     </div>
   );
 };
-
-// ContactForm.propTypes = {
-//   onAdd: PropTypes.func,
-// };
-
-//   state = {
-//     name: '',
-//     number: '',
-//   };
-
-//   handleChangeForm = evt => {
-//     const { name, value } = evt.target;
-//     this.setState({ [name]: value });
-//   };
-
-//   handleSubmit = e => {
-//     e.preventDefault();
-
-//     const { name, number} = this.state;
-
-//     this.props.onAdd(name, number);
-
-//     this.setState({ name: '', number: '' });
-//   };
-
-//   render() {
-//     const { name, number } = this.state;
-//     return (
-//       <div>
-//         <form onSubmit={this.handleSubmit}>
-//           <label>
-//             <p>Name</p>
-//             <input
-//               onChange={this.handleChangeForm}
-//               type="text"
-//               name="name"
-//               value={name}
-//               pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-//               title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-//               required
-//             />
-//           </label>
-
-//           <label>
-//             <p>Number</p>
-//             <input
-//               onChange={this.handleChangeForm}
-//               type="tel"
-//               name="number"
-//               value={number}
-//               pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-//               title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-//               required
-//             />
-//           </label>
-//           <button className={css.bloc} type="submit">Add contact</button>
-//         </form>
-//       </div>
-//     );
-//   }
-// }
