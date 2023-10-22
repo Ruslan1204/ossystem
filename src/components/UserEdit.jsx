@@ -3,26 +3,25 @@ import React, { useState } from 'react';
 import { editContact } from '../Redux/user.slice';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { userValue } from '../components/functionValue';
 import { useNavigate } from 'react-router-dom';
+
+import { useParams } from 'react-router-dom';
+
+import { TextField } from '@mui/material';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+
 
 export const UserEdit = () => {
   const dispatch = useDispatch();
   const users = useSelector(state => state.users);
 
   const [editedContact, setEditedContact] = useState(users);
-
   const navigate = useNavigate();
-
-  // const id = users
-  //   .map(user => {
-  //     return user.id;
-  //   })
-  //   .join(' ');
+  const { id } = useParams();
 
 
-
-  const handleEdit = (id) => {
+  const handleEdit = () => {
     const bytId = users
       .map(user => {
         return user.id;
@@ -41,25 +40,49 @@ export const UserEdit = () => {
     setEditedContact({ ...editedContact, [name]: value });
   };
 
-  const handleSubmit = e => {
+  const handleEditSubmit = e => {
     e.preventDefault();
 
     handleEdit();
     navigate('/');
 
     setEditedContact([]);
-
-    // navigate('/');
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="name" value={editedContact.name} onChange={handleChange} />
-        <input type="text" name="age" value={editedContact.age} onChange={handleChange} />
-        <button to="/" type="submit">
-          Зберегти зміни
-        </button>
+      <h2>Edit your user</h2>
+      <form onSubmit={handleEditSubmit}>
+        <TextField
+          onChange={handleChange}
+          autocomplete="off"
+          fullWidth
+          margin="dense"
+          id="fullWidth"
+          label="Name"
+          value={editedContact.name}
+          variant="outlined"
+          name="name"
+          sx={{ mr: 3 }}
+        />
+
+        <TextField
+          onChange={handleChange}
+          autocomplete="off"
+          fullWidth
+          margin="dense"
+          id="fullWidth"
+          label="Age"
+          value={editedContact.age}
+          variant="outlined"
+          name="age"
+          sx={{ mr: 3 }}
+        />
+        <Box sx={{ '& > button': { m: 1 } }}>
+          <Button variant="contained" color="success" type="submit">
+            Save changes
+          </Button>
+        </Box>
       </form>
     </div>
   );

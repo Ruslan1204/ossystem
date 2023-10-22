@@ -1,6 +1,6 @@
 // import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import css from '../UserForm/UserForm.module.css';
+// import css from '../UserForm/UserForm.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addUserAction } from 'Redux/user.slice';
 
@@ -9,18 +9,17 @@ import { useNavigate } from 'react-router-dom';
 
 import { UserEdit } from '../UserEdit';
 
-import axios from 'axios';
+import { TextField } from '@mui/material';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
-import { useParams } from "react-router-dom";
+import axios from 'axios';
 
 export const UserForm = () => {
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [images, setImages] = useState('');
   const [status, setStatus] = useState('');
-  
-  const { id } = useParams();
-
 
   const navigate = useNavigate();
 
@@ -105,14 +104,6 @@ export const UserForm = () => {
         setAge(value);
         break;
 
-      case 'images':
-        setImages(value);
-        break;
-
-      case 'status':
-        setStatus(value);
-        break;
-
       default:
         return;
     }
@@ -135,45 +126,54 @@ export const UserForm = () => {
 
   return (
     <div>
-      <Link to="/">Go to back</Link>
+      <Link to="/">
+        <Box sx={{ '& > button': { m: 1 } }}>
+          <Button variant="outlined" color="success" margin="dense">
+            Go to back
+          </Button>
+        </Box>
+      </Link>
+      <h2>Create your user</h2>
       <form onSubmit={handleSubmit}>
-        <label>
-          <p>Name</p>
-          <input
-            onChange={handleChangeForm}
-            type="text"
-            name="name"
-            value={name}
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-          />
-        </label>
+        <TextField
+          onChange={handleChangeForm}
+          autocomplete="off"
+          color="success"
+          fullWidth
+          margin="normal"
+          id="fullWidth"
+          label="Name"
+          value={name}
+          variant="outlined"
+          name="name"
+          sx={{ mr: 3 }}
+        />
+        <TextField
+          onChange={handleChangeForm}
+          autocomplete="off"
+          color="success"
+          fullWidth
+          id="fullWidth"
+          label="Age"
+          value={age}
+          variant="outlined"
+          name="age"
+          sx={{ mr: 3 }}
+        />
 
-        <label>
-          <p>Age</p>
-          <input
-            onChange={handleChangeForm}
-            type="text"
-            name="age"
-            value={age}
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-          />
-        </label>
-
-        <button className={css.bloc} type="submit">
-          Add User
-        </button>
+        <Box sx={{ '& > button': { m: 1 } }}>
+          <Button variant="contained" color="success" type="submit">
+            Add User
+          </Button>
+        </Box>
       </form>
 
       {name !== '' && age !== '' && <img src={img} alt="avatar" width={100} height={100} />}
-      {st.join('') === 'yes' && (
+      {/* {st.join('') === 'yes' && (
         <li className={css.item}>
           <span className={css.status}></span>
         </li>
-      )}
+      )} */}
 
       <UserEdit />
     </div>

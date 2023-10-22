@@ -23,7 +23,7 @@ export const userSlice = createSlice({
       },
     },
 
-    editContact: (state, { payload }) => {
+    editContact:(state, { payload }) => {
       const {id, updatedContact } = payload;
       const existingContact = state.users.find(user => user.id === id);
       if (existingContact) {

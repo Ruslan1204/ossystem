@@ -17,14 +17,6 @@ import {
   REGISTER,
 } from 'redux-persist';
 
-// import { filterReducer } from './filter.slice';
-
-//   data: contactsReducer,
-// });
-
-// const enhancer = devToolsEnhancer();
-// export const store = createStore(rootReducer, initState, enhancer);
-
 const persistConfig = {
   key: 'user',
   storage,
@@ -46,15 +38,3 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
-
-// export const store = configureStore({
-//     reducer: {
-//       tasks: tasksReducer,
-//       filters: filtersReducer,
-//     },
-//   });
-
-// const rootReducer = combineReducers({
-//   filter: contactsReducer,
-//   contacts: contactsReducer,
-// });

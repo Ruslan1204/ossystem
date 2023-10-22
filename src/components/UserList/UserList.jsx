@@ -1,7 +1,5 @@
 // import PropTypes from 'prop-types';
 import css from '../UserList/UserList.module.css';
-import { UserItem } from '../UserItem/UsertItem';
-// import { UserEdit } from '../UserEdit';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { userDeleteAction } from 'Redux/user.slice';
@@ -9,14 +7,19 @@ import { userDeleteAction } from 'Redux/user.slice';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import { styled } from '@mui/material/styles';
+import ButtonBase from '@mui/material/ButtonBase';
+
+import { IconButton, TextField, Container } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import axios from 'axios';
 
 import { usersFilterAction, usersAgeAction } from 'Redux/user.slice';
-import { Navigation } from '../Navigation/Navigation';
 
 export const UserList = () => {
   const dispatch = useDispatch();
@@ -26,9 +29,8 @@ export const UserList = () => {
 
   const [status, setStatus] = useState('');
   const [images, setImages] = useState([]);
-  const img = Object.values(images);
-  const st = Object.values(status);
-  const navigate = useNavigate();
+  // const img = Object.values(images);
+  // const st = Object.values(status);
 
   const changeFilter = evt => {
     const { value } = evt.target;
@@ -99,73 +101,99 @@ export const UserList = () => {
     dispatch(userDeleteAction(id));
   };
 
-  const handleClickEdit = () => {
-    navigate('/:id/edit');
-  };
-
   const filterUsers = users.filter(user => {
     return user.name.toLowerCase().includes(filter.toLowerCase()) && user.age.includes(age);
   });
 
-  // console.log('UserList', users);
+  const Img = styled('img')({
+    margin: 'auto',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '100%',
+  });
 
   return (
     <>
-      <Navigation />
       <label>
         <p>Find Users by name or age</p>
-        <input type="text" value={filter} onChange={changeFilter} />
-        <input type="number" value={age} onChange={changeAge} />
+        <TextField
+          autocomplete="off"
+          color="success"
+          fullWidth
+          margin="normal"
+          onChange={changeFilter}
+          id="fullWidth"
+          label="Name"
+          value={filter}
+          variant="outlined"
+          name="name"
+          sx={{ mr: 3 }}
+        />
+        <TextField
+          autocomplete="off"
+          color="success"
+          fullWidth
+          onChange={changeAge}
+          id="fullWidth"
+          label="Age"
+          value={age}
+          variant="outlined"
+          name="name"
+          sx={{ mr: 3 }}
+        />
       </label>
-
-      <TableHead className={css.list}>
-        <TableRow>
-          <TableCell>Avatar</TableCell>
-          <TableCell align="right">Name</TableCell>
-          <TableCell align="right">Age</TableCell>
-          <TableCell align="right">Status</TableCell>
-        </TableRow>
-      </TableHead>
-
-      {filterUsers.map(({ id, name, age, img, st }) => {
-        const deleteUser = () => {
-          handleDeleteUser(id);
-        };
-        return (
-          <TableRow key={name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-            {
-              <TableCell component="th" scope="row">
-                <img src={img} alt="avatar" />
-              </TableCell>
-            }
-            <TableCell align="right">{name}</TableCell>
-            <TableCell align="right">{age}</TableCell>
-            <TableCell align="right">
-              {st.join('') === 'yes' && (
-                <li className={css.wrapper}>
-                  <span className={css.status}></span>
-                </li>
-              )}
-            </TableCell>
-            <TableCell align="right">
-              <button type="button" onClick={deleteUser}>
-                Delete
-              </button>
-              <button to="/:id/edit" onClick={handleClickEdit}>
-                Edit
-              </button>
-            </TableCell>
-            {/* <UserEdit id={id} /> */}
+      <Container maxWidth="sm">
+        <TableHead className={css.list}>
+          <TableRow>
+            <TableCell align="right">#</TableCell>
+            <TableCell>Avatar</TableCell>
+            <TableCell align="right">Name</TableCell>
+            <TableCell align="right">Age</TableCell>
+            <TableCell align="right">Status</TableCell>
+            <TableCell align="right">Delete</TableCell>
+            <TableCell align="right">Edit</TableCell>
           </TableRow>
-        );
-      })}
+        </TableHead>
+        {filterUsers.map(({ id, name, age, img, st }, index) => {
+          const deleteUser = () => {
+            handleDeleteUser(id);
+          };
+          return (
+            <TableRow key={name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+              <TableCell align="right">{index + 1}</TableCell>
+              <TableCell component="th" scope="row">
+                <ButtonBase sx={{ width: 50, height: 50 }}>
+                  <Img src={img} alt="avatar" />
+                </ButtonBase>
+              </TableCell>
+              <TableCell align="right">{name}</TableCell>
+              <TableCell align="right">{age}</TableCell>
+              <TableCell align="right">
+                {st.join('') === 'yes' && (
+                  <li className={css.wrapper}>
+                    <span className={css.status}></span>
+                  </li>
+                )}
+              </TableCell>
+              <TableCell align="right">
+                <IconButton aria-label="delete" type="button" onClick={deleteUser} color="success">
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
+              <TableCell align="right">
+                <NavLink to={`${id}`} className={css.link}>
+                  <IconButton aria-label="edit" type="button" color="success">
+                    <EditIcon />
+                  </IconButton>
+                </NavLink>
+              </TableCell>
+            </TableRow>
+          );
+        })}
+      </Container>
     </>
   );
 };
-
-{
-  /* <UserItem key={id} id={id} name={name} age={age} onDelete={deleteUser} />; */
-}
 
 // ContactList.propTypes = {
 //   // contacts: PropTypes.array.isRequired,
