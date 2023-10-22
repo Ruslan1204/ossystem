@@ -44,7 +44,6 @@ export const UserForm = () => {
         );
 
         setImages({ images: config.url });
-        console.log(config.url);
       } catch (error) {
         console.log(error);
       } finally {
@@ -77,7 +76,7 @@ export const UserForm = () => {
     }
   }, [name, age]);
 
-  const handleAddUsers = (name, age, img, st) => {
+  const handleAddUsers = () => {
     const mapName = users
       .map(user => {
         return user.name;
@@ -112,9 +111,7 @@ export const UserForm = () => {
   const handleSubmit = e => {
     e.preventDefault();
 
-    handleAddUsers(name, age, img, st);
-
-    // console.log('UserForm', users);
+    handleAddUsers();
 
     setName('');
     setAge('');
@@ -169,11 +166,6 @@ export const UserForm = () => {
       </form>
 
       {name !== '' && age !== '' && <img src={img} alt="avatar" width={100} height={100} />}
-      {/* {st.join('') === 'yes' && (
-        <li className={css.item}>
-          <span className={css.status}></span>
-        </li>
-      )} */}
 
       <UserEdit />
     </div>

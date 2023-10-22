@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { editContact } from '../../Redux/user.slice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +15,7 @@ export const UserEdit = () => {
   const users = useSelector(state => state.users);
 
   const [editedContact, setEditedContact] = useState(users);
+
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -44,7 +44,7 @@ export const UserEdit = () => {
     handleEdit();
     navigate('/');
 
-    setEditedContact([]);
+    setEditedContact();
   };
 
   return (
@@ -53,6 +53,7 @@ export const UserEdit = () => {
       <form onSubmit={handleEditSubmit}>
         <TextField
           onChange={handleChange}
+          color="success"
           autocomplete="off"
           fullWidth
           margin="dense"
@@ -66,6 +67,7 @@ export const UserEdit = () => {
 
         <TextField
           onChange={handleChange}
+          color="success"
           autocomplete="off"
           fullWidth
           margin="dense"

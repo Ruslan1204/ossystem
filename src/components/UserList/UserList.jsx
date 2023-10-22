@@ -1,4 +1,3 @@
-
 import css from '../UserList/UserList.module.css';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,15 +20,11 @@ import axios from 'axios';
 
 import { usersFilterAction, usersAgeAction } from 'Redux/user.slice';
 
-import { Loader } from '../Loader/Loader';
-
 export const UserList = () => {
   const dispatch = useDispatch();
   const filter = useSelector(state => state.filter);
   const users = useSelector(state => state.users);
   const age = useSelector(state => state.age);
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const [status, setStatus] = useState('');
   const [images, setImages] = useState([]);
@@ -60,7 +55,6 @@ export const UserList = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true);
       try {
         const { config } = await axios.get(
           `https://api.dicebear.com/7.x/adventurer/svg?seed=${name}&hairColor=${colorHeir}`
@@ -69,8 +63,6 @@ export const UserList = () => {
         setImages({ images: config.url });
       } catch (error) {
         console.log(error);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -153,13 +145,14 @@ export const UserList = () => {
             <TableCell align="right">Edit</TableCell>
           </TableRow>
         </TableHead>
+
         {filterUsers.map(({ id, name, age, img, st }, index) => {
           const deleteUser = () => {
             handleDeleteUser(id);
           };
           return (
             <>
-              {isLoading && <Loader />}
+              {/* {isLoading && <Loader />} */}
               <TableRow key={name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell align="right">{index + 1}</TableCell>
                 <TableCell component="th" scope="row">
