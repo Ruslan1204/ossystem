@@ -1,4 +1,4 @@
-// import PropTypes from 'prop-types';
+
 import css from '../UserList/UserList.module.css';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,16 +21,18 @@ import axios from 'axios';
 
 import { usersFilterAction, usersAgeAction } from 'Redux/user.slice';
 
+import { Loader } from '../Loader/Loader';
+
 export const UserList = () => {
   const dispatch = useDispatch();
   const filter = useSelector(state => state.filter);
   const users = useSelector(state => state.users);
   const age = useSelector(state => state.age);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [status, setStatus] = useState('');
   const [images, setImages] = useState([]);
-  // const img = Object.values(images);
-  // const st = Object.values(status);
 
   const changeFilter = evt => {
     const { value } = evt.target;
@@ -58,7 +60,7 @@ export const UserList = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // setIsLoading(true);
+      setIsLoading(true);
       try {
         const { config } = await axios.get(
           `https://api.dicebear.com/7.x/adventurer/svg?seed=${name}&hairColor=${colorHeir}`
@@ -68,7 +70,7 @@ export const UserList = () => {
       } catch (error) {
         console.log(error);
       } finally {
-        // setIsLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -79,16 +81,13 @@ export const UserList = () => {
 
   useEffect(() => {
     const fetchStatus = async () => {
-      // setIsLoading(true);
       try {
         const { data } = await axios.get(`https://yesno.wtf/api`);
 
-        // console.log(data.answer);
         setStatus({ status: data.answer });
       } catch (error) {
         console.log(error);
       } finally {
-        // setIsLoading(false);
       }
     };
 
@@ -143,7 +142,7 @@ export const UserList = () => {
         />
       </label>
       <Container maxWidth="sm">
-        <TableHead className={css.list}>
+        <TableHead>
           <TableRow>
             <TableCell align="right">#</TableCell>
             <TableCell>Avatar</TableCell>
@@ -159,47 +158,46 @@ export const UserList = () => {
             handleDeleteUser(id);
           };
           return (
-            <TableRow key={name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-              <TableCell align="right">{index + 1}</TableCell>
-              <TableCell component="th" scope="row">
-                <ButtonBase sx={{ width: 50, height: 50 }}>
-                  <Img src={img} alt="avatar" />
-                </ButtonBase>
-              </TableCell>
-              <TableCell align="right">{name}</TableCell>
-              <TableCell align="right">{age}</TableCell>
-              <TableCell align="right">
-                {st.join('') === 'yes' && (
-                  <li className={css.wrapper}>
-                    <span className={css.status}></span>
-                  </li>
-                )}
-              </TableCell>
-              <TableCell align="right">
-                <IconButton aria-label="delete" type="button" onClick={deleteUser} color="success">
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
-              <TableCell align="right">
-                <NavLink to={`${id}`} className={css.link}>
-                  <IconButton aria-label="edit" type="button" color="success">
-                    <EditIcon />
+            <>
+              {isLoading && <Loader />}
+              <TableRow key={name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableCell align="right">{index + 1}</TableCell>
+                <TableCell component="th" scope="row">
+                  <ButtonBase sx={{ width: 50, height: 50 }}>
+                    <Img src={img} alt="avatar" />
+                  </ButtonBase>
+                </TableCell>
+                <TableCell align="right">{name}</TableCell>
+                <TableCell align="right">{age}</TableCell>
+                <TableCell align="right">
+                  {st.join('') === 'yes' && (
+                    <li className={css.wrapper}>
+                      <span className={css.status}></span>
+                    </li>
+                  )}
+                </TableCell>
+                <TableCell align="right">
+                  <IconButton
+                    aria-label="delete"
+                    type="button"
+                    onClick={deleteUser}
+                    color="success"
+                  >
+                    <DeleteIcon />
                   </IconButton>
-                </NavLink>
-              </TableCell>
-            </TableRow>
+                </TableCell>
+                <TableCell align="right">
+                  <NavLink to={`${id}`} className={css.link}>
+                    <IconButton aria-label="edit" type="button" color="success">
+                      <EditIcon />
+                    </IconButton>
+                  </NavLink>
+                </TableCell>
+              </TableRow>
+            </>
           );
         })}
       </Container>
     </>
   );
 };
-
-// ContactList.propTypes = {
-//   // contacts: PropTypes.array.isRequired,
-//   // onDelete: PropTypes.func.isRequired,
-// };
-
-{
-  /* <UserItem key={id} id={id} name={name} age={age} onDelete={deleteUser} />; */
-}

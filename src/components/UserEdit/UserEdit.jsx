@@ -1,6 +1,6 @@
-// ContactEdit.js
+
 import React, { useState } from 'react';
-import { editContact } from '../Redux/user.slice';
+import { editContact } from '../../Redux/user.slice';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,6 @@ import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
-
 export const UserEdit = () => {
   const dispatch = useDispatch();
   const users = useSelector(state => state.users);
@@ -19,7 +18,6 @@ export const UserEdit = () => {
   const [editedContact, setEditedContact] = useState(users);
   const navigate = useNavigate();
   const { id } = useParams();
-
 
   const handleEdit = () => {
     const bytId = users

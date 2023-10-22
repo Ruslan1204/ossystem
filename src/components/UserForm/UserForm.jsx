@@ -1,13 +1,12 @@
 // import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-// import css from '../UserForm/UserForm.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addUserAction } from 'Redux/user.slice';
 
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-import { UserEdit } from '../UserEdit';
+import { UserEdit } from '../UserEdit/UserEdit';
 
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -45,6 +44,7 @@ export const UserForm = () => {
         );
 
         setImages({ images: config.url });
+        console.log(config.url);
       } catch (error) {
         console.log(error);
       } finally {

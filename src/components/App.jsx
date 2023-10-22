@@ -1,11 +1,11 @@
-import { Users } from '../Pages/Users';
-import { UserEdit } from '../Pages/UserEdit';
-import { Layout } from '../components/Layout';
-// import css from '../components/App.module.css';
-
-import 'Redux/user.slice';
-
 import { Routes, Route } from 'react-router';
+
+import { Layout } from '../components/Layout';
+
+import { lazy } from 'react';
+
+const Users = lazy(() => import('Pages/Users'));
+const UserEdit = lazy(() => import('Pages/UserEdit'));
 
 export const App = () => {
   return (
